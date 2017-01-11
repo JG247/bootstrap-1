@@ -411,6 +411,24 @@ function($scope, $element, $attrs, $compile, $log, $parse, $window, $document, $
     }
   }
 
+  function bindKeydownToDatePicker(elem){
+    elem.bind("keydown", function (evt){
+      checkForTabKeydown(elem, evt);
+    });
+  }
+
+  function checkForTabKeydown(elem, evt){
+    if (evt.which === 9 && $scope.isOpen){
+      unbindKeydownToDatePicker(elem, evt);
+      $scope.isOpen = false;
+    }
+  }
+
+  function unbindKeydownToDatePicker(elem, evt){
+    elem.unbind("keydown");
+    evt.stopPropagation();
+  }
+
   function positionPopup() {
     if ($scope.isOpen) {
       var dpElement = angular.element($popup[0].querySelector('.uib-datepicker-popup'));
@@ -420,6 +438,7 @@ function($scope, $element, $attrs, $compile, $log, $parse, $window, $document, $
       if (dpElement.hasClass('uib-position-measure')) {
         dpElement.removeClass('uib-position-measure');
       }
+      bindKeydownToDatePicker(dpElement);
     }
   }
 
